@@ -15,22 +15,18 @@ type TasksContextType = {
   deleteTask: (id: number) => void;
 };
 
-// 1. Create the context to share state across screens
 const TasksContext = createContext<TasksContextType | null>(null);
 
-export default function Layout() {
+export default function RootLayout() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  // 2. Initialize the database and load tasks on app launch
   useEffect(() => {
     initDatabase();
     refresh();
   }, []);
 
-  // 3. Helper function to update the state from the local SQLite database
   const refresh = () => setTasks(database.getTasks());
 
-  // 4. Context functions to modify tasks and refresh the state
   const addTask = (t: string, d: string, cat: string) => {
     database.addTask(t, d, cat);
     refresh();
@@ -52,26 +48,13 @@ export default function Layout() {
     refresh();
   };
 
-  // 5. Provide the state and functions to the child routes and set up the header/routes
   return (
     <TasksContext.Provider value={{ tasks, addTask, updateTask, deleteTask }}>
-      <Stack
-        screenOptions={{
-          headerStyle: { backgroundColor: "#4f46e5" },
-          headerTintColor: "#fff",
-          headerTitleAlign: "center",
-        }}
-      >
-        <Stack.Screen name="notes/index" options={{ title: "My Tasks" }} />
-        <Stack.Screen name="notes/[id]" options={{ title: "Edit Task" }} />
-        <Stack.Screen
-          name="add-note"
-          options={{ title: "New Task", presentation: "modal" }}
-        />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
     </TasksContext.Provider>
   );
 }
 
-// 6. Custom hook for easy consumption of the context in your components
 export const useTasks = () => useContext(TasksContext)!;

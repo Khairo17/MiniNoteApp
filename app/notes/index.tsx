@@ -2,8 +2,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
+  Alert,
   FlatList,
+  Platform,
   Pressable,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -15,11 +18,19 @@ import { useTasks } from "../_layout";
 export default function TasksList() {
   const router = useRouter();
   const { tasks, deleteTask } = useTasks();
-
-  // State to hold the current search text
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Filter tasks based on the search query (matches title or category)
+  const confirmDelete = (id: number) => {
+    Alert.alert("Delete Task", "Are you sure you want to delete this task?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: () => deleteTask(id),
+      },
+    ]);
+  };
+
   const filteredTasks = tasks.filter((item) => {
     const itemTitle = item.title ? item.title.toLowerCase() : "";
     const itemCategory = item.category ? item.category.toLowerCase() : "";
@@ -30,7 +41,6 @@ export default function TasksList() {
 
   return (
     <View style={styles.container}>
-      {/* Search Bar Header */}
       <View style={styles.searchHeader}>
         <View style={styles.searchContainer}>
           <Ionicons
@@ -39,7 +49,6 @@ export default function TasksList() {
             color="#64748b"
             style={styles.searchIcon}
           />
-
           <TextInput
             placeholder="Search tasks or categories..."
             placeholderTextColor="#94a3b8"
@@ -48,8 +57,6 @@ export default function TasksList() {
             onChangeText={setSearchQuery}
             clearButtonMode="while-editing"
           />
-
-          {/* Clear button that appears when typing */}
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => setSearchQuery("")}>
               <Ionicons name="close-circle" size={18} color="#94a3b8" />
@@ -58,12 +65,10 @@ export default function TasksList() {
         </View>
       </View>
 
-      {/* Task List */}
       <FlatList
         data={filteredTasks}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ padding: 20, paddingBottom: 100 }}
-        // Displays a message when there are no items to show
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>
@@ -71,7 +76,6 @@ export default function TasksList() {
             </Text>
           </View>
         }
-        // Renders each item in the list
         renderItem={({ item }) => (
           <View style={styles.cardContainer}>
             <Pressable
@@ -85,7 +89,6 @@ export default function TasksList() {
                 <Text style={styles.categoryText}>
                   {item.category || "General"}
                 </Text>
-
                 <View
                   style={[
                     styles.badge,
@@ -107,7 +110,6 @@ export default function TasksList() {
                   </Text>
                 </View>
               </View>
-
               <Text style={styles.titleText}>{item.title}</Text>
               <Text style={styles.descriptionText} numberOfLines={1}>
                 {item.description}
@@ -115,7 +117,7 @@ export default function TasksList() {
             </Pressable>
 
             <TouchableOpacity
-              onPress={() => deleteTask(item.id)}
+              onPress={() => confirmDelete(item.id)}
               style={styles.deleteBtn}
             >
               <Ionicons name="trash-outline" size={20} color="#ef4444" />
@@ -124,10 +126,9 @@ export default function TasksList() {
         )}
       />
 
-      {/* Floating Action Button (FAB) */}
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => router.push("/add-note")}
+        onPress={() => router.push("/notes/add-note")}
       >
         <Ionicons name="add" size={35} color="#fff" />
       </TouchableOpacity>
@@ -136,14 +137,16 @@ export default function TasksList() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f8fafc" },
-
-  // Search Bar Styles
+  container: {
+    flex: 1,
+    backgroundColor: "#f8fafc",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
   searchHeader: {
     backgroundColor: "#4f46e5",
     paddingHorizontal: 20,
     paddingBottom: 20,
-    paddingTop: 10,
+    paddingTop: 16,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
@@ -163,8 +166,6 @@ const styles = StyleSheet.create({
   searchInput: { flex: 1, fontSize: 16, color: "#1e293b" },
   emptyContainer: { alignItems: "center", marginTop: 40 },
   emptyText: { color: "#64748b", fontSize: 16 },
-
-  // Task Card Styles
   cardContainer: {
     backgroundColor: "#fff",
     borderRadius: 16,

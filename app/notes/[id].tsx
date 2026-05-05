@@ -16,18 +16,14 @@ export default function TaskEdit() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const { tasks, updateTask } = useTasks();
-
-  // Find the task matching the ID from the URL params
   const task = tasks.find((t) => t.id.toString() === id);
 
-  // Form State
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("Pending");
   const [showModal, setShowModal] = useState(false);
 
-  // Load task data into state when the task is found
   useEffect(() => {
     if (task) {
       setTitle(task.title);
@@ -37,27 +33,23 @@ export default function TaskEdit() {
     }
   }, [task]);
 
-  // Handle updating the task and showing the success modal
   const handleUpdate = () => {
     if (!title.trim()) return;
     updateTask(Number(id), title, description, category, status);
     setShowModal(true);
   };
 
-  // Return nothing if the task is not loaded yet
   if (!task) return null;
 
   return (
     <ScrollView style={styles.container}>
       <Stack.Screen options={{ title: "Edit Task" }} />
 
-      {/* Success Modal */}
       <Modal visible={showModal} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Ionicons name="checkmark-circle" size={60} color="#4f46e5" />
             <Text style={styles.modalText}>Changes Saved!</Text>
-
             <TouchableOpacity
               style={styles.modalBtn}
               onPress={() => {
@@ -71,7 +63,6 @@ export default function TaskEdit() {
         </View>
       </Modal>
 
-      {/* Task Edit Form */}
       <View style={styles.card}>
         <Text style={styles.label}>Title</Text>
         <TextInput style={styles.input} value={title} onChangeText={setTitle} />
