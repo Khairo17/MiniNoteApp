@@ -54,7 +54,7 @@ export default function TaskEdit() {
               style={styles.modalBtn}
               onPress={() => {
                 setShowModal(false);
-                router.replace("/notes");
+                router.replace("/(tabs)/task");
               }}
             >
               <Text style={{ color: "#fff", fontWeight: "bold" }}>Close</Text>

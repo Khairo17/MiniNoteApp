@@ -6,35 +6,31 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: "#4f46e5",
+        tabBarInactiveTintColor: "#94a3b8",
         headerShown: false,
-        tabBarStyle: { paddingBottom: 6, height: 60 },
+        tabBarStyle: { 
+          height: 65, 
+          paddingBottom: 10,
+          backgroundColor: '#ffffff',
+          borderTopWidth: 1,
+          borderTopColor: '#e2e8f0',
+          elevation: 8, // Shadows for Android
+          bottom: 50,
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons
-              name={focused ? "home" : "home-outline"}
-              size={size}
-              color={color}
-            />
-          ),
+          tabBarIcon: ({ color, size }) => <Ionicons name="home" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="tasks"
-        redirect
+        name="task" 
         options={{
-          title: "My Tasks",
-          tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons
-              name={focused ? "list" : "list-outline"}
-              size={size}
-              color={color}
-            />
-          ),
+          title: "Tasks",
+          tabBarIcon: ({ color, size }) => <Ionicons name="list" size={size} color={color} />,
         }}
       />
     </Tabs>

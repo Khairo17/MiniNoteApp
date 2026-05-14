@@ -1,38 +1,41 @@
 import { useRouter } from "expo-router";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useTasks } from "../_layout";
+import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function HomeTab() {
   const router = useRouter();
-  const { tasks } = useTasks();
-
-  const activeTasks = tasks.filter((t) => t.status === "Pending");
-  const completedTasks = tasks.filter((t) => t.status === "Completed");
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerTitle}>Task Dashboard</Text>
+      {/* Top Navigation Header */}
+      <SafeAreaView style={styles.header}>
+        <Text style={styles.headerText}>Home</Text>
+      </SafeAreaView>
 
-      <View style={styles.cardContainer}>
-        <View style={styles.card}>
-          <Text style={styles.counter}>{activeTasks.length}</Text>
-          <Text style={styles.cardLabel}>Active Tasks</Text>
+      {/* Background Decorative Circle */}
+      <View style={styles.circle} />
+
+      {/* Main Content Card */}
+      <View style={styles.card}>
+        <View style={styles.iconCircle}>
+          {/* Note: Using an emoji to mimic the pencil icon in your image */}
+          <Text style={{ fontSize: 45 }}>📝</Text>
         </View>
 
-        <View style={[styles.card, styles.cardCompleted]}>
-          <Text style={[styles.counter, styles.completedText]}>
-            {completedTasks.length}
-          </Text>
-          <Text style={styles.cardLabel}>Completed</Text>
-        </View>
+        <Text style={styles.titleText}>QuickNotes</Text>
+        
+        <Text style={styles.subtitleText}>
+          Capture your thoughts and organize your life in one simple place.
+        </Text>
+
+        <TouchableOpacity
+          style={styles.viewBtn}
+          onPress={() => router.push("/task")}
+        >
+          <Text style={styles.viewBtnText}>View My Notes</Text>
+          <Ionicons name="arrow-forward" size={20} color="#fff" />
+        </TouchableOpacity>
       </View>
-
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() => router.push("/notes/add-note")}
-      >
-        <Text style={styles.btnText}>+ Add New Task</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -40,46 +43,84 @@ export default function HomeTab() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8fafc",
-    padding: 24,
+    backgroundColor: "#6b21ff", // Vibrant purple background from your image
+    alignItems: "center",
     justifyContent: "center",
   },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#1e293b",
-    marginBottom: 24,
-    textAlign: "center",
+  header: {
+    position: "absolute",
+    top: 0,
+    width: "100%",
+    alignItems: "center",
+    paddingVertical: 15,
   },
-  cardContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 36,
+  headerText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  circle: {
+    position: "absolute",
+    top: -50,
+    right: -50,
+    width: 250,
+    height: 250,
+    borderRadius: 125,
+    backgroundColor: "rgba(255, 255, 255, 0.15)", // Translucent circle
   },
   card: {
     backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 16,
-    width: "47%",
+    width: "85%",
+    borderRadius: 35,
+    paddingVertical: 40,
+    paddingHorizontal: 25,
     alignItems: "center",
-    elevation: 3,
+    // Shadow for iOS
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 15,
+    // Elevation for Android
+    elevation: 10,
   },
-  cardCompleted: { backgroundColor: "#f0fdf4" },
-  counter: { fontSize: 32, fontWeight: "bold", color: "#4f46e5" },
-  completedText: { color: "#16a34a" },
-  cardLabel: {
-    fontSize: 12,
+  iconCircle: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: "#f5f3ff",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  titleText: {
+    fontSize: 34,
+    fontWeight: "900",
+    color: "#1e293b",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  subtitleText: {
+    fontSize: 16,
     color: "#64748b",
-    marginTop: 8,
-    textTransform: "uppercase",
-    fontWeight: "600",
+    textAlign: "center",
+    lineHeight: 24,
+    marginBottom: 35,
+    paddingHorizontal: 10,
   },
-  btn: {
-    backgroundColor: "#4f46e5",
+  viewBtn: {
+    backgroundColor: "#6b21ff",
+    flexDirection: "row",
     paddingVertical: 18,
-    borderRadius: 16,
+    paddingHorizontal: 30,
+    borderRadius: 18,
     alignItems: "center",
-    elevation: 2,
+    justifyContent: "center",
+    width: "100%",
+    gap: 10,
   },
-  btnText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+  viewBtnText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
 });
