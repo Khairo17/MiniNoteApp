@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
+import { Platform } from "react-native";
 
 export default function TabLayout() {
   return (
@@ -9,13 +10,14 @@ export default function TabLayout() {
         tabBarInactiveTintColor: "#94a3b8",
         headerShown: false,
         tabBarStyle: { 
-          height: 65, 
-          paddingBottom: 10,
           backgroundColor: '#ffffff',
+          height: Platform.OS === 'android' ? 70 : 85,
+          paddingBottom: Platform.OS === 'android' ? 12 : 30,
           borderTopWidth: 1,
           borderTopColor: '#e2e8f0',
-          elevation: 8, // Shadows for Android
-          bottom: 50,
+          elevation: 10,
+          position: 'absolute', 
+          // bottom: 50 REMOVED to prevent it from disappearing
         },
       }}
     >

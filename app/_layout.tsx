@@ -45,10 +45,9 @@ export default function RootLayout() {
   return (
     <TasksContext.Provider value={{ tasks, addTask, updateTask, deleteTask }}>
       <Stack screenOptions={{ headerShown: false }}>
-        {/* Main Tab Container */}
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        {/* Detail screens stack */}
-        <Stack.Screen name="notes" options={{ headerShown: false }} />
+        {/* CRITICAL: This points the app to your Navigation Bar folder */}
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="notes" />
       </Stack>
     </TasksContext.Provider>
   );

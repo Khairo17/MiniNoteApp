@@ -18,9 +18,14 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "edgeToEdgeEnabled": true,
+      "edgeToEdgeEnabled": false,
       "predictiveBackGestureEnabled": false,
-      "package": "com.klutus.MyNotesApp"
+      "package": "com.klutus.MyNotesApp",
+      "config": {
+        "googlePlayServices": {
+          "arCore": "optional"
+        }
+      }
     },
     "web": {
       "output": "static",
